@@ -24,7 +24,7 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
                         SQRT(((c.up * c.dw) / (c.up + c.dw) + 0.410593604 / (c.up +
                         c.dw)) / (c.up + c.dw))) / (1 + 1.642374415 / (c.up + c.dw)))
                     FROM comment c, search_tree st
-                    WHERE c.parent_id = st.id and level + 1 < :maxDepth
+                    WHERE c.parent_id = st.id and level + 1 <= :maxDepth
             )
             SELECT id, text_content, parent_id, up, dw
             FROM search_tree ORDER BY path

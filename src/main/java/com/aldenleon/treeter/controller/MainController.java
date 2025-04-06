@@ -21,9 +21,10 @@ public class MainController {
     public String listTree(@RequestParam(name = "root-id", defaultValue="1") Long rootId,
                              @RequestParam(name = "max-depth", defaultValue="100") int maxDepth,
                              @RequestParam(name = "page-size", defaultValue="100") int pageSize,
-                             @RequestParam(name = "page", defaultValue="0") int page,
+                             // Thymeleaf front needs only one root element
+                             //@RequestParam(name = "page", defaultValue="0") int page,
                              Model model) {
-        List<CommentProjection> projectionList = commentRepository.findTreeById(rootId, maxDepth, pageSize, page);
+        List<CommentProjection> projectionList = commentRepository.findTreeById(rootId, maxDepth, pageSize, 0); //page);
         Comment rootComment = Util.projectionListToNestedComments(projectionList);
         model.addAttribute("rootComment", rootComment);
         return "list-tree";
