@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<span th:fragment="parent">
+    <span class="caret"></span>
+    <span>title</span>
+    <div class="parent comment" th:text="${comment.textContent}"></div>
+    <ul class="nested">
+        <li th:each="comment : ${comment.children}">
+            <span th:replace="(${#lists.isEmpty(comment.children)}) ?
+                ~{:: child} : ~{:: parent}"></span>
+        </li>
+    </ul>
+</span>
+
+<span th:fragment="child">
+    <span>title</span>
+    <div class="comment" th:text="${comment.textContent}"></div>
+</span>
+
+</body>
+</html>

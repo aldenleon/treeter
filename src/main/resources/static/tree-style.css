@@ -1,0 +1,124 @@
+/*
+para ajustar el contenido a la izquierda-derecha:
+
+para mover todo el comentario:
+.comment padding-left: 0.75em
+
+para mover todas las líneas a la derecha salvo las que dependen de un parent:
+ul.tree li margin-left: 0.5em
+
+para mover las líneas que dependen de un parent:
+.parent margin-left: 1.5em
+
+para mover todas las líneas horizontales (desplazando los carets):
+ul.tree li:before width: 0.75em
+
+para mover los carets sin tocar las líneas horizontales:
+.caret padding-left
+
+para mover el primer caret:
+.root margin-left: 1.1em
+*/
+
+body {
+  font-size: 100%;
+}
+
+p.tree,
+ul.tree,
+ul.tree ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul.tree ul {
+  margin-left: 1.0em;
+}
+
+ul.tree li {
+  margin-left: 0.5em;
+  border-left: thin solid #000;
+}
+
+ul.tree li:last-child {
+  border-left: none;
+}
+
+ul.tree li:before {
+  width: 0.75em;
+  height: 0.6em;
+  margin-right: 0.1em;
+  /* margin-left: 0.3em; */
+  vertical-align: top;
+  border-bottom: thin solid #000;
+  content: "";
+  display: inline-block;
+}
+
+ul.tree li:last-child:before {
+  border-left: thin solid #000;
+}
+
+.caret {
+  cursor: pointer;
+  user-select: none; /* Prevent text selection */
+}
+
+/*
+Create the caret/arrow with a unicode, and style it
+para cerrado por defecto:
+content: \25B7 ul.tree li:before -> height: 0.6em; (triángulo blanco)
+content: \261E ul.tree li:before -> height: 0.75em; (mano)
+para abierto por defecto:
+content: \25BD ul.tree li:before -> height: 0.6em; (triángulo blanco)
+*/
+.caret::before {
+  content: "\25BD";
+  color: black;
+  display: inline-block;
+  margin-right: 0;
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+  transform: rotate(-90deg);
+}
+
+/* Show the nested list */
+.nested {
+  display: block;
+}
+
+/* Hide the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+  display: none;
+}
+
+.comment {
+  padding-left: 0.75em;
+  margin-left: 0.35em;
+  max-width: 50em;
+}
+
+.parent {
+  margin-left: 1.5em;
+  border-left: solid;
+  border-width: thin;
+}
+
+.commentactive {
+  border-left: none;
+}
+
+ul.tree > li {
+  border-left: none;
+}
+
+ul.tree > li:before {
+  content: none;
+}
+
+.root {
+    margin-left: 1.1em;
+}

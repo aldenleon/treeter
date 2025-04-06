@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>basic front</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" type="text/css" th:href="@{/tree-style.css}" />
+</head>
+<body>
+
+<div>
+<ul class="tree">
+    <li>
+        <span class="caret root"></span>
+        <span>root title</span>
+        <div class="parent comment" th:text="${rootComment.textContent}"></div>
+        <ul class="nested">
+            <li th:each="comment : ${rootComment.children}">
+                <span th:replace="(${#lists.isEmpty(comment.children)}) ?
+                    ~{comment-fragments :: child} : ~{comment-fragments :: parent}"></span>
+            </li>
+        </ul>
+    </li>
+</ul>
+</div>
+
+<script type="text/javascript" th:src="@{/toggler.js}"></script>
+
+</body>
+</html>
