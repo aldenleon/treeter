@@ -20,9 +20,9 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
                     FROM comment WHERE id = :rootId
                 UNION ALL
                     SELECT c.id, c.text_content, c.parent_id, c.up, c.dw, level + 1, path ||
-                        (1 - ((c.up + 0.821187208) / (c.up + c.dw) - 1.281551565545 *
-                        SQRT(((c.up * c.dw) / (c.up + c.dw) + 0.410593604 / (c.up +
-                        c.dw)) / (c.up + c.dw))) / (1 + 1.642374415 / (c.up + c.dw)))
+                        (((c.up + 0.82118720757542) / (c.up + c.dw) - 1.28155156554500 *
+                        sqrt(((c.up * c.dw) / ((c.up + c.dw) * (c.up + c.dw)) + 0.41059360378771 /
+                        (c.up + c.dw)) / (c.up + c.dw))) / (1 + 1.64237441515084 / (c.up + c.dw)))
                     FROM comment c, search_tree st
                     WHERE c.parent_id = st.id and level + 1 <= :maxDepth
             )
