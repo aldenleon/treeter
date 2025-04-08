@@ -2,10 +2,20 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
+<!-- reply symbol in unicode:
+&#x2BA1
+&#x21AA
+-->
+<span th:fragment="reply-link (comment)">
+    <a th:href="|@{/reply}?parent-id=${comment.id}&?root-id=${rootId}&max-depth=${maxDepth}&page-size=${pageSize}|">
+        &#x2BA1
+    </a>
+</span>
+
 <span th:fragment="parent">
     <span class="caret"></span>
-    <span>title</span>
-    <div class="parent comment" th:text="${comment.textContent}"></div>
+    <span th:replace="~{:: reply-link (${comment})}"></span>
+    <div class="parent comment" th:utext="${comment.textContent}"></div>
     <ul class="nested">
         <li th:each="comment : ${comment.children}">
             <span th:replace="(${#lists.isEmpty(comment.children)}) ?
@@ -15,8 +25,9 @@
 </span>
 
 <span th:fragment="child">
-    <span>title</span>
-    <div class="comment" th:text="${comment.textContent}"></div>
+    <span>&#x25B6</span>
+    <span th:replace="~{:: reply-link (${comment})}"></span>
+    <div class="child comment" th:utext="${comment.textContent}"></div>
 </span>
 
 </body>

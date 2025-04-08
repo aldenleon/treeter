@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>reply form</title>
+</head>
+<body>
+
+<form action="#" th:action="|@{/reply}|"
+      th:object="${newComment}" method="post">
+    <input type="hidden" th:field="*{parentId}" />
+    <input type="hidden" th:field="*{rootId}" />
+    <input type="hidden" th:field="*{maxDepth}" />
+    <input type="hidden" th:field="*{pageSize}" />
+    <table>
+        <tr>
+            <td>Name:</td>
+            <td><input type="text" th:field="*{textContent}" /></td>
+            <td th:if="${errors}">invalid input</td>
+        </tr>
+        <tr>
+            <td><button type="submit">Submit</button></td>
+        </tr>
+    </table>
+</form>
+
+</body>
+</html>

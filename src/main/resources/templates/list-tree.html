@@ -12,8 +12,8 @@
 <ul class="tree">
     <li>
         <span class="caret root"></span>
-        <span>root title</span>
-        <div class="parent comment" th:text="${rootComment.textContent}"></div>
+        <span th:replace="~{comment-fragments :: reply-link (${rootComment})}"></span>
+        <div class="parent comment" th:utext="${rootComment.textContent}"></div>
         <ul class="nested">
             <li th:each="comment : ${rootComment.children}">
                 <span th:replace="(${#lists.isEmpty(comment.children)}) ?
