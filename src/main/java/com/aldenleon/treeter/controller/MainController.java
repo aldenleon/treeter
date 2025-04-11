@@ -2,6 +2,7 @@ package com.aldenleon.treeter.controller;
 
 import com.aldenleon.treeter.Util;
 import com.aldenleon.treeter.dto.NewCommentDto;
+import com.aldenleon.treeter.exception.CommentNotFoundException;
 import com.aldenleon.treeter.model.Comment;
 import com.aldenleon.treeter.projection.CommentProjection;
 import com.aldenleon.treeter.repository.CommentRepository;
@@ -28,6 +29,12 @@ public class MainController {
                              Model model) {
         List<CommentProjection> projectionList = commentRepository.findTreeById(rootId, maxDepth, pageSize, 0);
         Comment rootComment = Util.projectionListToNestedComments(projectionList);
+
+        if (rootComment == null) {
+            log.warn("invalid id requested");
+            throw new CommentNotFoundException();
+        }
+
         model.addAttribute("rootComment", rootComment);
         model.addAttribute("rootId", rootId);
         model.addAttribute("maxDepth", maxDepth);
