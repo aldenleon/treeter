@@ -5,7 +5,9 @@ import com.aldenleon.treeter.dto.NewCommentDto;
 import com.aldenleon.treeter.exception.CommentNotFoundException;
 import com.aldenleon.treeter.model.Comment;
 import com.aldenleon.treeter.projection.CommentProjection;
+import com.aldenleon.treeter.projection.StepRelationProjection;
 import com.aldenleon.treeter.repository.CommentRepository;
+import com.aldenleon.treeter.repository.StepRelationRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -21,6 +24,7 @@ import java.util.List;
 @Slf4j
 public class MainController {
     private final CommentRepository commentRepository;
+    private final StepRelationRepository stepRelationRepository;
 
     @RequestMapping("/list-tree-view")
     public String listTree(@RequestParam(name = "root-id", defaultValue="1") Long rootId,
@@ -57,9 +61,10 @@ public class MainController {
         return "reply";
     }
 
-    private void dropComment(NewCommentDto newComment, Model model) {
+    private String dropComment(NewCommentDto newComment, Model model) {
         model.addAttribute("newComment", newComment);
         model.addAttribute("errors", true);
+        return "reply";
     }
 
     @PostMapping("/reply")
@@ -67,19 +72,53 @@ public class MainController {
                         Model model) {
         if (bindingResult.hasErrors()) {
             log.warn("invalid comment dropped");
-            dropComment(newComment, model);
-            return "reply";
+            return dropComment(newComment, model);
         }
 
         newComment.setTextContent(Util.sanitizeHTML(newComment.getTextContent(), log));
         if (newComment.getTextContent() == null) {
-            dropComment(newComment, model);
-            return "reply";
+            log.warn("unsafe comment dropped");
+            return dropComment(newComment, model);
+        }
+
+        List<Long> stepParentIds = new ArrayList<>();
+        if (newComment.getStepParents() != null) {
+            for (String splitted : newComment.getStepParents().trim().split(";", 0)) {
+                String item = splitted.trim();
+                if (! item.isEmpty()) {
+                    long id;
+                    try {
+                        id = Long.parseLong(item);
+                    } catch (NumberFormatException e) {
+                        log.warn("comment with stepParent has invalid number formatting");
+                        return dropComment(newComment, model);
+                    }
+                    if (id == newComment.getParentId()) {
+                        log.warn("tried to save parent as step-parent");
+                        return dropComment(newComment, model);
+                    }
+                    if (! commentRepository.existsById(id)) {
+                        log.warn("comment with step-parent has invalid step-parent ID");
+                        return dropComment(newComment, model);
+                    }
+                    stepParentIds.add(id);
+                }
+            }
         }
 
         log.info("new comment received at /reply, saving to database");
-        CommentProjection saved = commentRepository.save(newComment.getParentId(), newComment.getTextContent(), 1, 0);
-        log.info("new comment saved with id {}", saved.getId());
+        CommentProjection savedComment = commentRepository.save(newComment.getParentId(),
+                newComment.getTextContent(), 1, 0);
+        log.info("new comment saved with id {}", savedComment.getId());
+
+        if (newComment.getStepParents() != null && ! stepParentIds.isEmpty()) {
+            for (int i = 0; i < stepParentIds.size(); i++) {
+                log.info("new step-relation received at /reply, saving to database");
+                StepRelationProjection savedStepRelation = stepRelationRepository.save(i, savedComment.getId(),
+                        stepParentIds.get(i));
+                log.info("new step-relation saved with id {}", savedStepRelation.getId());
+            }
+        }
 
         return "redirect:/list-tree-view?root-id=" + newComment.getRootId() +
                 "&max-depth=" + newComment.getMaxDepth() + "&page-size=" + newComment.getPageSize();

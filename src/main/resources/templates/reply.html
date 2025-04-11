@@ -13,16 +13,9 @@
     <input type="hidden" th:field="*{maxDepth}" />
     <input type="hidden" th:field="*{pageSize}" />
     <table>
-        <tr>
-            <td>Name:</td>
-            <td><input type="text" th:field="*{textContent}" /></td>
-            <td th:if="${errors}">invalid input</td>
-        </tr>
-        <tr>
-            <td><button type="submit">Submit</button></td>
-        </tr>
         <tr th:if="${errors}"><td>Invalid input, please try again.</td></tr>
         <tr><td>To:</td><td><a th:href="|@{/list-tree-view}?root-id=*{parentId}|" th:text="*{parentId}"></a></td></tr>
+        <tr><td>CC (use ';' as separator):</td><td><input type="text" pattern="[0-9;\s]+" maxlength="256" th:field="*{stepParents}" /></td></tr>
         <tr><td>Comment:</td><td><textarea cols="50" rows="10" autofocus maxlength=1024 th:field="*{textContent}"></textarea></td></tr>
         <tr><td><button type="submit">Submit</button></td></tr>
     </table>

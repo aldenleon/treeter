@@ -23,4 +23,7 @@ public class NewCommentDto {
 
     @NotNull
     private int pageSize;
+
+    @Size(max = 256)
+    private String stepParents;
 }
