@@ -6,15 +6,21 @@
 &#x2BA1
 &#x21AA
 -->
-<span th:fragment="reply-link (comment)">
-    <a th:href="|@{/reply}?parent-id=${comment.id}&?root-id=${rootId}&max-depth=${maxDepth}&page-size=${pageSize}|">
-        &#x2BA1
-    </a>
+<span th:fragment="comment-header (comment)">
+    <a th:href="|@{/reply}?parent-id=${comment.id}&?root-id=${rootId}&max-depth=${maxDepth}&page-size=${pageSize}|"
+       title="reply" class="button">&#x2BA1</a>
+    <span class="header">id:&nbsp;</span>
+    <a th:href="|@{/list-tree-view}?root-id=${comment.id}|" th:text="${comment.id}"
+       class="button" title="make root"></a>
+    <a class="header button" title="like" th:href="@{/list-tree-view}">&#x1F44D</a>
+    <span th:text="|${comment.up}&nbsp;|"></span>
+    <a class="button" title="dislike" th:href="@{/list-tree-view}">&#x1F44E</a>
+    <span th:text="|${comment.dw}&nbsp;|"></span>
 </span>
 
 <span th:fragment="parent">
-    <span class="caret"></span>
-    <span th:replace="~{:: reply-link (${comment})}"></span>
+    <span class="caret" title="open/close"></span>
+    <span th:replace="~{:: comment-header (${comment})}"></span>
     <div class="parent comment" th:utext="${comment.textContent}"></div>
     <ul class="nested">
         <li th:each="comment : ${comment.children}">
@@ -25,8 +31,8 @@
 </span>
 
 <span th:fragment="child">
-    <span>&#x25B6</span>
-    <span th:replace="~{:: reply-link (${comment})}"></span>
+    <span class="childcaret">&#x25B6</span>
+    <span th:replace="~{:: comment-header (${comment})}"></span>
     <div class="child comment" th:utext="${comment.textContent}"></div>
 </span>
 

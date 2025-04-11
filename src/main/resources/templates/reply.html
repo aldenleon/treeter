@@ -21,6 +21,10 @@
         <tr>
             <td><button type="submit">Submit</button></td>
         </tr>
+        <tr th:if="${errors}"><td>Invalid input, please try again.</td></tr>
+        <tr><td>To:</td><td><a th:href="|@{/list-tree-view}?root-id=*{parentId}|" th:text="*{parentId}"></a></td></tr>
+        <tr><td>Comment:</td><td><textarea cols="50" rows="10" autofocus maxlength=1024 th:field="*{textContent}"></textarea></td></tr>
+        <tr><td><button type="submit">Submit</button></td></tr>
     </table>
 </form>
 

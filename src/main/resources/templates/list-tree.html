@@ -11,8 +11,8 @@
 <div>
 <ul class="tree">
     <li>
-        <span class="caret root"></span>
-        <span th:replace="~{comment-fragments :: reply-link (${rootComment})}"></span>
+        <span class="caret root" title="open/close"></span>
+        <span th:replace="~{comment-fragments :: comment-header (${rootComment})}"></span>
         <div class="parent comment" th:utext="${rootComment.textContent}"></div>
         <ul class="nested">
             <li th:each="comment : ${rootComment.children}">

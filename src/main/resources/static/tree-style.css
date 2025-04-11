@@ -65,6 +65,10 @@ ul.tree li:last-child:before {
   user-select: none; /* Prevent text selection */
 }
 
+.childcaret {
+  user-select: none;
+}
+
 /*
 Create the caret/arrow with a unicode, and style it
 para cerrado por defecto:
@@ -125,5 +129,13 @@ ul.tree > li:before {
 }
 
 .root {
-    margin-left: 1.1em;
+  margin-left: 1.1em;
+}
+
+.header {
+  margin-left: 1em;
+}
+
+.button {
+  text-decoration: none;
 }
