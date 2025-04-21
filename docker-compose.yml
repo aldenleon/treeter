@@ -1,0 +1,27 @@
+networks:
+  treeter-network:
+    driver: bridge
+
+services:
+  postgresql:
+    image: 'bitnami/postgresql:latest'
+    environment:
+      POSTGRESQL_DATABASE: treeterdb
+      POSTGRESQL_USERNAME: treeteruser
+      POSTGRESQL_PASSWORD: treeterpass
+    ports:
+      - "5432:5432"
+    networks:
+      - treeter-network
+    restart: always
+  treeter-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - postgresql
+    networks:
+      - treeter-network
+    restart: always
