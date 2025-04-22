@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class Util {
     private Util() {} // not instantiable
@@ -21,12 +22,12 @@ public final class Util {
     private static void nest(Comment root, int rootIndex, List<CommentProjection> projectionList) {
         List<Comment> children = new ArrayList<>();
         int i = rootIndex + 1;
-        while (i < projectionList.size()) {
-            //&& !Objects.equals(projectionList.get(i).getParentId(), projectionList.get(rootIndex).getParentId())) {
-            // only makes sense if children in projectionList are always under their parent.
-            // that's not the case if two sibling comments have the same score and (at least) one of them has children.
+        while (i < projectionList.size()//) {
+                && (! Objects.equals(projectionList.get(i).getParentId(), projectionList.get(rootIndex).getParentId())
+                || projectionList.get(i).getScore() == projectionList.get(rootIndex).getScore())) {
+            // iterate until you exhaust the list or you find a sibling that doesn't have the same score
             CommentProjection projection = projectionList.get(i);
-            if (projection.getParentId() == root.getId()) {
+            if (Objects.equals(projection.getParentId(), root.getId())) {
                 Comment child = projectionToComment(projection);
                 //child.setParent(root); // avoid infinite recursion
                 nest(child, i, projectionList);
@@ -43,13 +44,13 @@ public final class Util {
         if (projectionList == null || projectionList.isEmpty()) return null;
         Comment root = projectionToComment(projectionList.getFirst());
         if (projectionList.size() == 1 ||
-                projectionList.get(1).getParentId() != root.getId() ) { // only one root element
+                !Objects.equals(projectionList.get(1).getParentId(), root.getId())) { // only one root element
             return root;
         }
         List<Comment> children = new ArrayList<>();
         for (int i = 1; i < projectionList.size(); i++) {
             CommentProjection projection = projectionList.get(i);
-            if (projection.getParentId() == root.getId()) {
+            if (Objects.equals(projection.getParentId(), root.getId())) {
                 Comment child = projectionToComment(projection);
                 //child.setParent(root); // avoid infinite recursion
                 nest(child, i, projectionList);

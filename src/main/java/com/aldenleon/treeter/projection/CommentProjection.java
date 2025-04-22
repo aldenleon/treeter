@@ -6,4 +6,5 @@ public interface CommentProjection {
     int getUp();
     int getDw();
     Long getParentId();
+    double getScore();
 }

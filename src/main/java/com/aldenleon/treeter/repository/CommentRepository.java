@@ -15,18 +15,22 @@ public interface CommentRepository extends CrudRepository<Comment, Long> {
      */
     @Transactional
     @NativeQuery("""
-            WITH RECURSIVE search_tree(id, text_content, parent_id, up, dw, level, path) AS (
-                    SELECT id, text_content, parent_id, up, dw, 1 as level, ARRAY[0.0]
+            WITH RECURSIVE search_tree(id, text_content, parent_id, up, dw, level, path, score) AS (
+                    SELECT id, text_content, parent_id, up, dw, 1 as level, ARRAY[0.0], 0.0 as score
                     FROM comment WHERE id = :rootId
                 UNION ALL
                     SELECT c.id, c.text_content, c.parent_id, c.up, c.dw, level + 1, path ||
-                        (((c.up + 0.82118720757542) / (c.up + c.dw) - 1.28155156554500 *
+                        (1 - ((c.up + 0.82118720757542) / (c.up + c.dw) - 1.28155156554500 *
                         sqrt(((c.up * c.dw) / ((c.up + c.dw) * (c.up + c.dw)) + 0.41059360378771 /
                         (c.up + c.dw)) / (c.up + c.dw))) / (1 + 1.64237441515084 / (c.up + c.dw)))
+                        ,
+                        (1 - ((c.up + 0.82118720757542) / (c.up + c.dw) - 1.28155156554500 *
+                        sqrt(((c.up * c.dw) / ((c.up + c.dw) * (c.up + c.dw)) + 0.41059360378771 /
+                        (c.up + c.dw)) / (c.up + c.dw))) / (1 + 1.64237441515084 / (c.up + c.dw))) as score
                     FROM comment c, search_tree st
                     WHERE c.parent_id = st.id and level + 1 <= :maxDepth
             )
-            SELECT id, text_content, parent_id, up, dw
+            SELECT id, text_content, parent_id, up, dw, score
             FROM search_tree ORDER BY path
             LIMIT :pageSize OFFSET :pageSize * :page;
             """)
