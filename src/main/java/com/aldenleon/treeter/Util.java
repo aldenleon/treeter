@@ -69,7 +69,7 @@ public final class Util {
                 .and(Sanitizers.LINKS)
                 .and(Sanitizers.TABLES);
         List<String> sanitizerChanges = new ArrayList<>();
-        String safeHTML = sanitizer.sanitize(unsafeHTML,
+        String safeHTML = sanitizer.sanitize(unsafeHTML.replaceAll("\\R", "<br />"),
                 new HtmlChangeListener<List<String>>() {
                     @Override
                     public void discardedTag(List<String> strings, String s) {
