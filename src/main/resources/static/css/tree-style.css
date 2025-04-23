@@ -132,10 +132,38 @@ ul.tree > li:before {
   margin-left: 1.1em;
 }
 
-.header {
+.commentheader {
   margin-left: 1em;
 }
 
 .button {
   text-decoration: none;
+}
+
+.reply {
+  margin-left: 1em;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  padding: 2px 2em;
+  height: 40px;
+  background: #555;
+  color: #f1f1f1;
+}
+
+.rightheadermenu {
+  float: right;
+  position: relative;
+  top: 25%;
+}
+
+.headerlogo {
+  position: relative;
+  top: 25%;
+}
+
+a.headerlink {
+  color: #f1f1f1;
 }

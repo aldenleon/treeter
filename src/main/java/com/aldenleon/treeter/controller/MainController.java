@@ -11,6 +11,8 @@ import com.aldenleon.treeter.repository.StepRelationRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -30,6 +32,7 @@ public class MainController {
     public String listTree(@RequestParam(name = "root-id", defaultValue="1") Long rootId,
                              @RequestParam(name = "max-depth", defaultValue="100") int maxDepth,
                              @RequestParam(name = "page-size", defaultValue="100") int pageSize,
+                             @AuthenticationPrincipal OAuth2User principal,
                              Model model) {
         List<CommentProjection> projectionList = commentRepository.findTreeById(rootId, maxDepth, pageSize, 0);
         Comment rootComment = Util.projectionListToNestedComments(projectionList);
@@ -39,6 +42,12 @@ public class MainController {
             throw new CommentNotFoundException();
         }
 
+        String user = null;
+        if (principal != null) {
+            user = principal.getName();
+        }
+
+        model.addAttribute("user", user);
         model.addAttribute("rootComment", rootComment);
         model.addAttribute("rootId", rootId);
         model.addAttribute("maxDepth", maxDepth);
