@@ -167,3 +167,12 @@ ul.tree > li:before {
 a.headerlink {
   color: #f1f1f1;
 }
+
+.gotoparent {
+  margin-left: 1.7em;
+  margin-bottom: 0em;
+}
+
+.body {
+  margin-top: 0.5em;
+}

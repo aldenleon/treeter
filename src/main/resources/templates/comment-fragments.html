@@ -6,7 +6,7 @@
 &#x2BA1
 &#x21AA
 -->
-<span th:fragment="comment-header (comment)">
+<span th:fragment="comment-header (comment)" th:id="|#${comment.id}|">
     <span>id:&nbsp;</span>
     <a th:href="|@{/list-tree-view}?root-id=${comment.id}|" th:text="${comment.id}"
        class="button" title="make root"></a>

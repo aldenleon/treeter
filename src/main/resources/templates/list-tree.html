@@ -19,8 +19,14 @@
     </span>
 </div>
 
+<div class="body">
 
-<div>
+<p class="gotoparent" th:if="${rootParent}">
+    <a class="button" title="go to parent"
+       th:href="|@{/list-tree-view}?root-id=${rootParent}|">&#x2BA4</a>
+    Go to parent
+</p>
+
 <ul class="tree">
     <li>
         <span class="caret root" title="open/close"></span>
@@ -34,6 +40,7 @@
         </ul>
     </li>
 </ul>
+
 </div>
 
 <script type="text/javascript" th:src="@{/js/toggler.js}"></script>
