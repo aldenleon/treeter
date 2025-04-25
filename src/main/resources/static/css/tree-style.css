@@ -176,3 +176,16 @@ a.headerlink {
 .body {
   margin-top: 0.5em;
 }
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+input, select, textarea {
+  font-size: large;
+}
+
+ol li, ul li {
+  padding: 0;
+}

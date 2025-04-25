@@ -2,17 +2,18 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <title>basic front</title>
+    <title>Treeter</title>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
     <link rel="stylesheet" type="text/css" th:href="@{/css/tree-style.css}" />
 </head>
 <body>
 
 <div class="header">
-    <a th:href="@{/list-tree-view}">
-        <img class="headerlogo" th:src="@{/img/treeter-logo-small.png}"  alt="treeter logo" height="22px" />
+    <a class="headerlogo" th:href="@{/list-tree-view}">
+        <img th:src="@{/img/treeter-logo-small.png}"  alt="treeter logo" height="22px" />
     </a>
     <span class="rightheadermenu" th:text="${user} == null ? _ : |Signed in as: ${user}|">
         <a class="headerlink" href="/oauth2/authorization/github">Sign in with Github</a>
@@ -42,6 +43,8 @@
 </ul>
 
 </div>
+
+<br/><br/><br/>
 
 <script type="text/javascript" th:src="@{/js/toggler.js}"></script>
 

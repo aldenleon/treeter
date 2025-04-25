@@ -42,16 +42,12 @@ public class MainController {
             throw new CommentNotFoundException();
         }
 
-        Long parentId = projectionList.getFirst().getParentId();
-        if (parentId != null) {
-            model.addAttribute("rootParent", parentId);
-        }
-
         String user = null;
         if (principal != null) {
             user = principal.getName();
         }
 
+        model.addAttribute("rootParent", projectionList.getFirst().getParentId());
         model.addAttribute("user", user);
         model.addAttribute("rootComment", rootComment);
         model.addAttribute("rootId", rootId);

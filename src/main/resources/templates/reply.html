@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/tree-style.css}" />
     <title>reply form</title>
 </head>
 <body>
@@ -19,7 +21,7 @@
         <tr><td>To:</td><td><a th:href="|@{/list-tree-view}?root-id=*{parentId}|" th:text="*{parentId}"></a></td></tr>
         <tr><td>CC (use ';' as separator):</td><td><input type="text" pattern="[0-9;\s]+" maxlength="256" th:field="*{stepParents}" /></td></tr>
         <tr><td>Comment:</td><td><textarea cols="50" rows="10" autofocus maxlength=1024 th:field="*{textContent}"></textarea></td></tr>
-        <tr><td><button type="submit">Submit</button></td></tr>
+        <tr><td><button type="submit">Submit</button></td><td></td></tr>
     </table>
 </form>
 
