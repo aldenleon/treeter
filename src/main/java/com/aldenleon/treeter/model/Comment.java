@@ -19,7 +19,10 @@ public class Comment {
     @Column(length = 1024)
     private String textContent;
 
+    //@org.hibernate.annotations.Formula("(select count(*) from Vote v where v.comment_id = id and v.up = true)")
     private int up;
+
+    //@org.hibernate.annotations.Formula("(select count(*) from Vote v where v.comment_id = id and v.up = false)")
     private int dw;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,4 +36,10 @@ public class Comment {
 
     @OneToMany(mappedBy = "stepChild", fetch = FetchType.LAZY)
     private List<StepRelation> stepParents;
+
+    @OneToMany(mappedBy = "comment", fetch = FetchType.LAZY)
+    private List<Vote> votes;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private UserAccount owner;
 }

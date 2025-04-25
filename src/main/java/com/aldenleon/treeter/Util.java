@@ -16,7 +16,7 @@ public final class Util {
 
     private static Comment projectionToComment(CommentProjection c) {
         return new Comment(c.getId(), c.getTextContent(), c.getUp(), c.getDw(),
-                null, null, null, null);
+                null, null, null, null, null, null);
     }
 
     private static void nest(Comment root, int rootIndex, List<CommentProjection> projectionList) {
